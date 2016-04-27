@@ -1,0 +1,61 @@
+import java.util.List;
+import java.util.Map;
+
+public class Semester
+{
+	 private String  semesterName;
+	 private List<Student> studentList;
+	 private List <Course> coursesList;
+	 
+//methods start
+	 
+	 public void addCourse(Course course){
+		
+		//needs to add if statements for duplicate entries
+		 this.coursesList.add(course);
+	 }
+	 
+	 public void deleteCourse(Course course)
+	 {
+		//needs to add if statements
+		 this.coursesList.remove(course);
+	 } 
+	 
+	 public void addStudent (Student studentList)
+	 {
+		 //needs to add if statements for duplicate entries
+		 this.studentList.add(studentList);
+	 }
+	 
+	 public void dropStudent (Student studentList)
+	 {
+		 //needs to add if statements for duplicate entries
+		 this.studentList.remove(studentList);
+	 }	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+// getters and setter start	 
+	 public String getSemesterName() {
+		return semesterName;
+	}
+	public void setSemesterName(String semesterName) {
+		this.semesterName = semesterName;
+	}
+	public List<Student> getStudentList() {
+		return studentList;
+	}
+
+	public List <Course> getCoursesList() {
+		return coursesList;
+	}	
+	
+}
