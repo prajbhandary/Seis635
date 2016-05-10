@@ -1,0 +1,160 @@
+package main;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
+public class ClassRegistrationMain {
+
+	public void loadProfessors(SemesterEnroll sem) {
+		String csvFile = "src/resources/professors.csv";
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ",";
+		try {
+			br = new BufferedReader(new FileReader(csvFile));
+			while ((line = br.readLine()) != null) {
+
+				// use comma as separator
+				String[] profArray = line.split(cvsSplitBy);
+				Professor prof = new Professor(profArray[0], profArray[1], profArray[2], profArray[3]);
+				sem.addProfessor(prof);
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		for (Professor temp : sem.getProfessorList()) {
+			System.out.println("ProfessorName: " + temp.getName() + " ProfessorId: " + temp.getProfId());
+		}
+		System.out.println();
+	}
+
+	public void loadStudents(SemesterEnroll semEnroll, Semester sem) {
+		String csvFile = "src/resources/students.csv";
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ",";
+		try {
+			br = new BufferedReader(new FileReader(csvFile));
+			while ((line = br.readLine()) != null) {
+
+				// use comma as separator
+				String[] values = line.split(cvsSplitBy);
+				Student student = new Student(values[0], values[1], values[2], values[3]);
+				semEnroll.addStudent(student, sem);
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		for (Student temp : semEnroll.getStudentList()) {
+			System.out.println("StudentName: " + temp.getStudentName() + " StudentId: " + temp.getStudentId());
+		}
+		System.out.println();
+	}
+
+	public void loadCourses(SemesterEnroll semEnroll, Semester sem) {
+		String csvFile = "src/resources/courses.csv";
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ",";
+		try {
+			br = new BufferedReader(new FileReader(csvFile));
+			while ((line = br.readLine()) != null) {
+
+				// use comma as separator
+				String[] values = line.split(cvsSplitBy);
+
+				String profId = values[2];
+				Professor prof = semEnroll.getProfessor(profId);
+				if (prof != null) {
+					Course course = new Course(values[0], values[1], prof, Integer.parseInt(values[3]),
+							Integer.parseInt(values[4]), values[5], Integer.parseInt(values[6]),
+							Integer.parseInt(values[7]));
+
+					sem.addCourse(course);
+				} else {
+					System.err.println("Cannot find professor with id: " + profId);
+				}
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		for (Course temp : sem.getCoursesList()) {
+			System.out.println("CourseName: " + temp.getCourseName() + " CourseId: " + temp.getCourseId()
+					+ " CourseDay: " + temp.getDay());
+		}
+		System.out.println();
+	}
+
+	public static void main(String[] args) {
+		ClassRegistrationMain program = new ClassRegistrationMain();
+		Semester fall = new Semester("Fall");
+		Semester winter = new Semester("Winter");
+
+		final SemesterEnroll semEnroll = new SemesterEnroll();
+		semEnroll.addSemester(fall);
+		semEnroll.addSemester(winter);
+
+		program.loadProfessors(semEnroll);
+		program.loadStudents(semEnroll, fall);
+		program.loadCourses(semEnroll, fall);
+
+
+		// set look and feel to the system look and feel
+		 try {
+		 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		 } catch (Exception ex) {
+		 ex.printStackTrace();
+		 }
+		
+		 SwingUtilities.invokeLater(new Runnable() {
+		 @Override
+		 public void run() {
+			 new BaseGUI(semEnroll);
+		 }
+		 });
+		
+
+	}
+
+}
