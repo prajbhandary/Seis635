@@ -1,0 +1,127 @@
+package main;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class Course {
+
+	private String name;
+	private List<Student> waitList;
+	private String courseId;
+	private Professor professor;
+	private int courseCredit;
+	private int totalSize;
+	private Set<Student> studentList;
+	private String day; //days the course meets
+	private int startTime; //start time of course
+	private int endTime; //end time of course
+
+	public Course(String name, String courseId, Professor professor, int credit, int totalSize, String day, int start, int end) {
+		this.name = name;
+		this.courseId = courseId;
+		this.professor = professor;
+		this.setCourseCredit(credit);
+		this.totalSize = totalSize;
+		this.waitList = new ArrayList<Student>();
+		this.studentList = new HashSet<Student>();
+		this.setDay(day);
+		this.setStartTime(start);
+		this.setEndTime(end);
+	}
+
+	public String getCourseName() {
+		return this.name;
+
+	}
+
+	public Professor getProfessor() {
+		return this.professor;
+	}
+
+	public String getCourseId() {
+		return this.courseId;
+	}
+
+	public int getCourseCredit() {
+		return courseCredit;
+	}
+
+	public void setCourseCredit(int courseCredit) {
+		this.courseCredit = courseCredit;
+	}
+
+	public Set<Student> getStudentList() {
+		return studentList;
+	}
+
+	public List<Student> getWaitList() {
+		return waitList;
+	}
+
+	public void addStudent(Student student) {
+		if (this.getNumStudents() < this.totalSize) {
+			this.studentList.add(student);
+		} else if (!this.studentList.contains(student)) {
+			this.addToWaitList(student);
+		}
+	}
+
+	public void dropStudent(Student student) {
+		if (this.studentList.contains(student)) {
+			this.studentList.remove(student);
+			this.addFromWaitList();
+		}
+	}
+
+	private void addFromWaitList() {
+		if (!this.waitList.isEmpty()) {
+			Student waitListedStudent = this.waitList.remove(0);
+			this.addStudent(waitListedStudent);
+		}
+
+	}
+
+	private void addToWaitList(Student student) {
+		if (!this.waitList.contains(student)) {
+			this.waitList.add(student);
+		}
+	}
+
+	public void removeStudent(Student student) {
+		if (this.getNumStudents() <= this.totalSize) {
+			this.studentList.add(student);
+		}
+
+	}
+
+	public int getNumStudents() {
+		return this.studentList.size();
+	}
+
+	public String getDay() {
+		return day;
+	}
+
+	public void setDay(String day) {
+		this.day = day;
+	}
+
+	public int getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(int startTime) {
+		this.startTime = startTime;
+	}
+
+	public int getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(int endTime) {
+		this.endTime = endTime;
+	}
+
+}
