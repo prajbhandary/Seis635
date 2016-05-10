@@ -1,0 +1,96 @@
+package main;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+public class SemesterEnroll {
+	private static Map<Student, Semester> studentList;
+	private static Set<Professor> professorList;
+	private static Map<String, Student> studentIDMap;
+	private static Map<String, Professor> professorIDMap;
+	private Set<Semester> semesterList;
+	
+	public SemesterEnroll() {
+		studentList = new HashMap<Student, Semester>();
+		professorList = new HashSet<Professor>();
+		semesterList = new HashSet<Semester>();
+		studentIDMap = new HashMap<String, Student>();
+		professorIDMap = new HashMap<String, Professor>();
+	}
+
+	public void addStudent(Student student, Semester sem) {
+		// needs to add if statements for duplicate entries
+		SemesterEnroll.studentList.put(student, sem);
+		SemesterEnroll.studentIDMap.put(student.getStudentId(), student);
+	}
+
+	public void dropStudent(Student student) {
+		// needs to add if statements for duplicate entries
+		SemesterEnroll.studentList.remove(student);
+		SemesterEnroll.studentIDMap.remove(student.getStudentId());
+	}
+	
+	
+	public void addProfessor(Professor professor) {
+		// needs to add if statements for duplicate entries
+		SemesterEnroll.professorList.add(professor);
+		SemesterEnroll.professorIDMap.put(professor.getProfId(), professor);
+	}
+	
+	public void dropProfessor(Professor professor) {
+		// needs to add if statements for duplicate entries
+		SemesterEnroll.professorList.remove(professor);
+		SemesterEnroll.professorIDMap.remove(professor.getProfId());
+	}
+
+	public Set<Student> getStudentList() {
+		return studentList.keySet();
+	}
+	
+	public Map<Student, Semester> getStudentMap() {
+		return studentList;
+	}
+
+	public Set<Professor> getProfessorList() {
+		return professorList;
+	}
+
+	public Professor getProfessor(String id) {
+		if(professorIDMap.containsKey(id)){
+			return professorIDMap.get(id);
+		}
+		return null;
+	}
+	
+	public Student getStudent(String id) {
+		if(studentIDMap.containsKey(id)){
+			return studentIDMap.get(id);
+		}
+		return null;
+	}
+
+	public Set<Semester> getSemesterList() {
+		return semesterList;
+	}
+	
+	public Semester getSemester(String name) {
+		for(Semester sem: semesterList){
+			if(sem.getSemesterName().equals(name)){
+				return sem;
+			}
+		}
+		return null;
+	}
+
+	public void addSemester(Semester sem) {
+		semesterList.add(sem);
+	}
+	
+	public void dropSemester(Semester sem) {
+		semesterList.remove(sem);
+	}
+	
+
+}
